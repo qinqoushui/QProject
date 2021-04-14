@@ -3,13 +3,13 @@
  */
 package net.syzc.modules.pm.service;
 
+import net.syzc.modules.pm.dao.PmProjBaseDao;
+import net.syzc.modules.pm.entity.PmProjBase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import net.syzc.modules.pm.entity.PmProjBase;
-import net.syzc.modules.pm.dao.PmProjBaseDao;
 
 /**
  * 项目项目信息Service
@@ -48,7 +48,13 @@ public class PmProjBaseService extends CrudService<PmProjBaseDao, PmProjBase> {
 	@Override
 	@Transactional(readOnly=false)
 	public void save(PmProjBase pmProjBase) {
-		super.save(pmProjBase);
+		try {
+
+			super.save(pmProjBase);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**

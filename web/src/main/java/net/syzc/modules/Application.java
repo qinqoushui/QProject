@@ -13,7 +13,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author ThinkGem
  * @version 2018-10-13
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="net.syzc.modules")
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) {
