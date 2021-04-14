@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="syzc-module-pm" />
+        <module name="syzc-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jeesite-module-pm" target="1.8" />
+      <module name="jeesite-parent" target="1.8" />
+      <module name="syzc-module-pm" target="1.8" />
+      <module name="syzc-root" target="1.5" />
+      <module name="syzc-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jeesite-module-pm" options="-parameters" />
+      <module name="syzc-module-pm" options="-parameters" />
+      <module name="syzc-web" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../parent/jeesite-parent.iml" filepath="$PROJECT_DIR$/../parent/jeesite-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pm/syzc-module-pm.iml" filepath="$PROJECT_DIR$/../pm/syzc-module-pm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../root/syzc-root.iml" filepath="$PROJECT_DIR$/../root/syzc-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/syzc-web.iml" filepath="$PROJECT_DIR$/syzc-web.iml" />
+    </modules>
+  </component>
+</project>
