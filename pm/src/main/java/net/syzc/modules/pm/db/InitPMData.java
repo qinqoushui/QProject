@@ -33,6 +33,9 @@ public class InitPMData extends BaseInitDataTests {
             runCreateScript("pm.sql");
         }
         runCreateScript("pm_initdata.sql");
+        if (!GenUtils.isTableExists("test_data")) {
+            runCreateScript("test.sql");
+        }
         return true;
     }
 

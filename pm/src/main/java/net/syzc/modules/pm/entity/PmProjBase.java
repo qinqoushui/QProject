@@ -14,7 +14,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 项目项目信息Entity
  * @author 张文相
- * @version 2021-04-13
+ * @version 2021-04-19
  */
 @Table(name="pm_proj_base", alias="a", label="项目项目信息信息", columns={
 		@Column(name="id", attrName="id", label="编号", isPK=true),

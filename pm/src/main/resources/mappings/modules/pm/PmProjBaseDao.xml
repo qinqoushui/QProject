@@ -10,16 +10,6 @@
 			${sqlMap.where.toSql()}
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
-	</select>
-
-	<insert id="insert" parameterType="PmProjBase"  >
-	insert into pm_proj_base( id,project_name,remarks)
-	VALUES
-	(
-#{id},
-		#{projectName},
-
-		#{remarks}
-	)
-	</insert>  -->
+	</select> -->
+	
 </mapper>

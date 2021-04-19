@@ -10,7 +10,7 @@ import net.syzc.modules.pm.entity.PmProjBase;
 /**
  * 项目项目信息DAO接口
  * @author 张文相
- * @version 2021-04-13
+ * @version 2021-04-19
  */
 @MyBatisDao
 public interface PmProjBaseDao extends CrudDao<PmProjBase> {
