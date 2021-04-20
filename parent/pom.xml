@@ -66,9 +66,12 @@
 		<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>
 		
-		<!-- docker setting -->
-        <docker.dockerHost>http://192.168.56.102:2375</docker.dockerHost>
-        <docker.imageName>${project.groupId}/${project.artifactId}:4.2</docker.imageName>
+		<!-- docker setting
+ <docker.imageName>${project.groupId}/${project.artifactId}:4.2</docker.imageName>
+        
+		-->
+        <docker.dockerHost>http://127.0.0.1:2375</docker.dockerHost>
+        <docker.imageName>syzc/${project.artifactId}:0.1</docker.imageName>
         
 	</properties>
 	

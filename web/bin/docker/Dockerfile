@@ -1,5 +1,5 @@
 FROM frolvlad/alpine-java:jdk8-slim
-MAINTAINER ThinkGem@163.com
+MAINTAINER zhangwenxiang@syzcxx.net
 ENV TZ "Asia/Shanghai"
 ENV LANG C.UTF-8
 VOLUME /tmp
@@ -22,4 +22,4 @@ ENTRYPOINT java $JAVA_OPTS -cp /app $JAVA_OPTS org.springframework.boot.loader.W
 
 EXPOSE 8980
 
-#docker run -p 8980:8980 com.jeesite/jeesite-web:4.2
+#docker run -p  0.0.0.0:8980:8980 net.syzc/syzc-web:4.2  --permanent
