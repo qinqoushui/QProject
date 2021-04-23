@@ -1,0 +1,85 @@
+<% layout('/layouts/default.html', {title: '功能模块管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-notebook"></i> ${text('功能模块管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('pm:pmModule:edit')){ %>
+					<a href="${ctx}/pm/pmModule/form" class="btn btn-default btnTool" title="${text('新增功能模块')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+				<% if(hasPermi('pm:pmModule:leadin')){ %>
+				<a href="${ctx}/pm/pmModule/leadin" class="btn btn-default btnTool" title="${text('导入功能模块')}"><i class="glyphicon glyphicon-import"></i> ${text('导入')}</a>
+				<% } %>
+				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${pmModule}" action="${ctx}/pm/pmModule/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('父级编号')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="parentId" dictType="" blankOption="true" class="form-control"
+						items="${parentList}" itemLabel="moduleName" itemValue="id" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('模块名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="moduleName" maxlength="200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('模块标签')}：</label>
+					<div class="control-inline">
+						<#form:input path="moduleTag" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('模块地址')}：</label>
+					<div class="control-inline">
+						<#form:input path="moduleUrl" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("编号")}', name:'id', index:'id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/pm/pmModule/form?id='+row.id+'" class="btnList" data-title="${text("编辑功能模块")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("父级模块")}', name:'parentModule.moduleName', index:'a.parent_id', width:150, align:"left", frozen:true},
+
+		{header:'${text("模块名称")}', name:'moduleName', index:'a.module_name', width:150, align:"left"},
+		{header:'${text("模块标签")}', name:'moduleTag', index:'a.module_tag', width:150, align:"left"},
+		{header:'${text("模块地址")}', name:'moduleUrl', index:'a.module_url', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('pm:pmModule:edit')){ %>
+				actions.push('<a href="${ctx}/pm/pmModule/form?id='+row.id+'" class="btnList" title="${text("编辑功能模块")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/pm/pmModule/delete?id='+row.id+'" class="btnList" title="${text("删除功能模块")}" data-confirm="${text("确认要删除该功能模块吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
