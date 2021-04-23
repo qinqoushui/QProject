@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import com.jeesite.common.tests.BaseInitDataTests;
 import com.jeesite.modules.gen.utils.GenUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 初始化核心表数据
@@ -33,9 +35,9 @@ public class InitPMData extends BaseInitDataTests {
             runCreateScript("pm.sql");
         }
         runCreateScript("pm_initdata.sql");
-        if (!GenUtils.isTableExists("test_data")) {
-            runCreateScript("test.sql");
-        }
+//        if (!GenUtils.isTableExists("test_data")) {
+//            runCreateScript("test.sql");
+//        }
         return true;
     }
 
@@ -52,19 +54,22 @@ public class InitPMData extends BaseInitDataTests {
         Menu menu = new Menu();
         menu.setModuleCodes(pm.getModuleCode());
         List<Menu> list = menuService.findList(menu);
-        Menu pmMenu = new Menu();
-        pmMenu.setMenuIcon("fa fa-institution");
-        pmMenu.setMenuNameOrig("项目管理");
-        pmMenu.setModuleCodes(pm.getModuleCode());
-        pmMenu.setMenuType("1");
-        pmMenu.setIsNewRecord(true);
+//添加菜单和按钮
+        Map<String,String> map=new HashMap<>();
+        map.put("项目信息","fa fa-book");
+        for (String key : map.keySet()) {
+            String value = map.get(key);
+            Menu pmMenu = new Menu();
+            pmMenu.setMenuIcon(value);
+            pmMenu.setMenuNameOrig(key);
+            pmMenu.setModuleCodes(pm.getModuleCode());
+            pmMenu.setMenuType("1");
+            pmMenu.setIsNewRecord(true);
+            Menu oldMenu=menuService.get(pmMenu);
+            if(oldMenu==null)
+                menuService.save(pmMenu);
+        }
 
-        Menu pmBase = new Menu();
-        pmBase.setMenuHref("/pm/pmProjBase/list");
-        pmBase.setMenuIcon("fa fa-book");
-        pmBase.setMenuNameOrig("项目信息");
-        pmBase.setMenuTitle("项目信息");
-        pmBase.setModuleCodes(pm.getModuleCode());
-        pmBase.setMenuType("1");
+
     }
 }
