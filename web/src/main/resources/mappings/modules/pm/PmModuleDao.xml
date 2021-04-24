@@ -11,19 +11,5 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-<!--	<insert id="insertBatch">-->
-<!--		INSERT INTO ${sqlMap.table.toSql()}(-->
-<!--		module_name,-->
-<!--		module_tag,-->
-<!--		module_url-->
-<!--		) VALUES-->
-<!--		<foreach item="item" index="index" collection="insertList" separator=",">-->
-<!--			(-->
-<!--			#{item.moduleName},-->
-<!--			#{item.moduleTag},-->
-<!--			 #{item.moduleUrl}-->
-<!--			)-->
-<!--		</foreach>-->
-<!--	</insert>-->
-
+	
 </mapper>

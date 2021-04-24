@@ -5,12 +5,18 @@
 -- 功能模块
 CREATE TABLE [pm_module]
 (
-	[id] text NOT NULL,
-	[parent_id] text,
+	[module_code] text NOT NULL,
 	[module_name] text,
 	[module_tag] text UNIQUE,
 	[module_url] text,
-	PRIMARY KEY ([id])
+	[parent_code] text NOT NULL,
+	[parent_codes] text NOT NULL,
+	[tree_sort] numeric NOT NULL,
+	[tree_sorts] text NOT NULL,
+	[tree_leaf] text NOT NULL,
+	[tree_level] numeric NOT NULL,
+	[tree_names] text NOT NULL,
+	PRIMARY KEY ([module_code])
 );
 
 

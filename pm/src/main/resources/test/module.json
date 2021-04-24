@@ -1,0 +1,143 @@
+{
+  "ProjSN": "55a2eae9-8a69-46b5-a47b-250900853c8a",
+  "CompanyName": "北京中云创新科技有限公司",
+  "CompanyShortName": "中云创新",
+  "StartDate": "2020-11-11",
+  "EndDate": "2022-11-12",
+  "OperatorCount": 100,
+  "UserCount": 65535,
+  "Modules": [
+    {
+      "ModelName": "管理平台",
+      "ModelTag": "SysSetting",
+      "ModelDate": "2022-11-12",
+      "SubModels": [
+        {
+          "SubModelTag": "Buttons",
+          "SubModelName": "操作按钮",
+          "SubModelUrl": "sys/ButtonList.aspx"
+        },
+        {
+          "SubModelTag": "PTTermArea",
+          "SubModelName": "设备区域管理",
+          "SubModelUrl": "Pos/MachineArea.aspx"
+        },
+        {
+          "SubModelTag": "Navigation",
+          "SubModelName": "导航菜单",
+          "SubModelUrl": "sys/NavigationList.aspx"
+        },
+        {
+          "SubModelTag": "Role",
+          "SubModelName": "角色管理",
+          "SubModelUrl": "sys/RoleList.aspx"
+        },
+        {
+          "SubModelTag": "Users",
+          "SubModelName": "操作员管理",
+          "SubModelUrl": "sys/Users.aspx"
+        },
+        {
+          "SubModelTag": "SytResource",
+          "SubModelName": "系统资源管理",
+          "SubModelUrl": "sys/SysResource.aspx"
+        },
+        {
+          "SubModelTag": "Company",
+          "SubModelName": "单位管理",
+          "SubModelUrl": "Ey/EyCompany.aspx"
+        },
+        {
+          "SubModelTag": "PTCreditType",
+          "SubModelName": "收支类型",
+          "SubModelUrl": "Ey/SzCreditType.aspx"
+        },
+        {
+          "SubModelTag": "Log",
+          "SubModelName": "操作日志",
+          "SubModelUrl": "sys/logs.aspx"
+        },
+        {
+          "SubModelTag": "Profile",
+          "SubModelName": "个性化设置",
+          "SubModelUrl": "sys/SysConfig.aspx"
+        },
+        {
+          "SubModelTag": "EYCampus",
+          "SubModelName": "事业部管理",
+          "SubModelUrl": "Ey/EYCampus.aspx"
+        },
+        {
+          "SubModelTag": "CampusUser",
+          "SubModelName": "事业部操作员",
+          "SubModelUrl": "Ey/EYCampusUser.aspx"
+        },
+        {
+          "SubModelTag": "auditRepeal",
+          "SubModelName": "撤销审核记录",
+          "SubModelUrl": "common/AuditRepealRecord.aspx"
+        },
+        {
+          "SubModelTag": "LogRecord",
+          "SubModelName": "日志记录",
+          "SubModelUrl": "sys/LogRecord.aspx"
+        },
+        {
+          "SubModelTag": "WechatParam",
+          "SubModelName": "微信参数管理",
+          "SubModelUrl": "Ey/WechatParam.aspx"
+        },
+      ]
+    },
+    {
+      "ModelName": "卡务中心",
+      "ModelTag": "CardCenter",
+      "ModelDate": "2022-11-12",
+      "SubModels": [
+        {
+          "SubModelTag": "CardType",
+          "SubModelName": "卡类管理",
+          "SubModelUrl": "Ey/CardType.aspx"
+        },
+        {
+          "SubModelTag": "PTCardManagement",
+          "SubModelName": "卡片管理",
+          "SubModelUrl": "Bm/CardManagement.aspx"
+        },
+        {
+          "SubModelTag": "SysParameter",
+          "SubModelName": "参数管理",
+          "SubModelUrl": "sys/SysParameter.aspx"
+        }
+      ]
+    },
+    {
+      "ModelName": "人事中心",
+      "ModelTag": "EmployeeTranslate",
+      "ModelDate": "2022-11-12",
+      "SubModels": [
+        {
+          "SubModelTag": "PTDepartment",
+          "SubModelName": "部门管理",
+          "SubModelUrl": "Bm/EmplDept.aspx"
+        },
+        {
+          "SubModelTag": "PTEmployee",
+          "SubModelName": "人员管理",
+          "SubModelUrl": "Bm/EmplData.aspx"
+        },
+        {
+          "SubModelTag": "WechatUserBinding",
+          "SubModelName": "微信绑定管理",
+          "SubModelUrl": "Bm/WechatUserBindingManage.aspx"
+        },
+        {
+          "SubModelTag": "WechatAdminUser",
+          "SubModelName": "微信管理员",
+          "SubModelUrl": "Bm/WechatAdminUser.aspx"
+        }
+      ]
+    },
+
+  ]
+}

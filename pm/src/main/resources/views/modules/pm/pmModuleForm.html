@@ -12,49 +12,63 @@
 		<#form:form id="inputForm" model="${pmModule}" action="${ctx}/pm/pmModule/save" method="post" class="form-horizontal">
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
-				<#form:hidden path="id"/>
 				<div class="row">
-				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label col-sm-2" title="">
-								<span class="required hide">*</span> ${text('父级编号')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-5">
-								<#form:select path="parentId" dictType="" blankOption="true" class="form-control"
-								items="${parentList}" itemLabel="moduleName" itemValue="id" />
+							<label class="control-label col-sm-4">${text('上级功能模块')}：</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="parent" title="${text('上级功能模块')}"
+									path="parent.id" labelPath="parent.moduleName"
+									url="${ctx}/pm/pmModule/treeData?excludeCode=${pmModule.id}"
+									class="" allowClear="true" canSelectRoot="true" canSelectParent="true"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label col-sm-2" title="">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('编号')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:hidden path="isNewRecord"/>
+							<#form:input path="moduleCode" maxlength="20" readonly="${!pmModule.isNewRecord}" class="form-control required abc"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('模块名称')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-5">
+							<div class="col-sm-8">
 								<#form:input path="moduleName" maxlength="200" class="form-control"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label col-sm-2" title="">
+							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('模块标签')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-5">
+							<div class="col-sm-8">
 								<#form:input path="moduleTag" maxlength="50" class="form-control"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label col-sm-2" title="">
+							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('模块地址')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-5">
+							<div class="col-sm-8">
 								<#form:input path="moduleUrl" maxlength="500" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('本级排序号')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="treeSort" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
@@ -81,10 +95,22 @@ $("#inputForm").validate({
 			js.showMessage(data.message);
 			if(data.result == Global.TRUE){
 				js.closeCurrentTabPage(function(contentWindow){
-					contentWindow.page();
+					contentWindow.$('#dataGrid').dataGrid('refreshTreeChildren',
+							$('#parentCode').val(), '${pmModule.id}');
 				});
 			}
 		}, "json");
     }
 });
+
+// 选择上级节点回调方法
+function treeselectCallback(id, act, index, layero){
+	if (id == 'parent' && (act == 'ok' || act == 'clear')){
+		// 创建并初始化下一个节点信息，如：排序号、默认值
+		$.get('${ctx}/pm/pmModule/createNextNode?parentCode='
+				+$('#parentCode').val(), function(data){
+			$('#treeSort').val(data.treeSort);
+		});
+	}
+}
 </script>

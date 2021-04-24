@@ -3,12 +3,10 @@
  */
 package net.syzc.modules.pm.entity;
 
-import com.jeesite.modules.sys.entity.User;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
+import com.jeesite.common.entity.TreeEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
@@ -19,26 +17,21 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @version 2021-04-23
  */
 @Table(name="pm_module", alias="a", label="功能模块信息", columns={
-		@Column(name="id", attrName="id", label="编号", isPK=true),
-		@Column(name="parent_id", attrName="parentId", label="父级编号"),
-		@Column(name="module_name", attrName="moduleName", label="模块名称", queryType=QueryType.LIKE),
+		@Column(name="module_code", attrName="moduleCode", label="编号", isPK=true),
+		@Column(name="module_name", attrName="moduleName", label="模块名称", queryType=QueryType.LIKE, isTreeName=true),
 		@Column(name="module_tag", attrName="moduleTag", label="模块标签", queryType=QueryType.LIKE),
 		@Column(name="module_url", attrName="moduleUrl", label="模块地址", queryType=QueryType.LIKE),
-	}, joinTable={
-		@JoinTable(type=Type.LEFT_JOIN, entity=PmModule.class, attrName="parentModule", alias="p",
-			on="p.id = a.parent_id" ,columns = {
-				@Column(includeEntity = PmModule.class),
-		}),
-}, orderBy="a.id DESC"
+		@Column(includeEntity=TreeEntity.class),
+	}, orderBy="a.tree_sorts, a.module_code"
 )
-public class PmModule extends DataEntity<PmModule> {
+public class PmModule extends TreeEntity<PmModule> {
 	
 	private static final long serialVersionUID = 1L;
-	private String parentId;// 父级编号
+	private String moduleCode;		// 编号
 	private String moduleName;		// 模块名称
 	private String moduleTag;		// 模块标签
 	private String moduleUrl;		// 模块地址
-	private PmModule parentModule;
+	
 	public PmModule() {
 		this(null);
 	}
@@ -47,12 +40,22 @@ public class PmModule extends DataEntity<PmModule> {
 		super(id);
 	}
 	
-	public PmModule getParentModule() {
-		return parentModule;
+	@Override
+	public PmModule getParent() {
+		return parent;
 	}
 
-	public void setParentModule(PmModule ParentModule) {
-		this.parentModule = ParentModule;
+	@Override
+	public void setParent(PmModule parent) {
+		this.parent = parent;
+	}
+	
+	public String getModuleCode() {
+		return moduleCode;
+	}
+
+	public void setModuleCode(String moduleCode) {
+		this.moduleCode = moduleCode;
 	}
 	
 	@Length(min=0, max=200, message="模块名称长度不能超过 200 个字符")
@@ -81,12 +84,5 @@ public class PmModule extends DataEntity<PmModule> {
 	public void setModuleUrl(String moduleUrl) {
 		this.moduleUrl = moduleUrl;
 	}
-
-	public String getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+	
 }

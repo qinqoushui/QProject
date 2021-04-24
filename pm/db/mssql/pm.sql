@@ -5,12 +5,18 @@
 -- 功能模块
 CREATE TABLE [pm_module]
 (
-	[id] varchar(20) NOT NULL,
-	[parent_id] varchar(20),
+	[module_code] varchar(20) NOT NULL,
 	[module_name] nvarchar(200),
 	[module_tag] varchar(50) UNIQUE,
 	[module_url] nvarchar(500),
-	PRIMARY KEY ([id])
+	[parent_code] varchar(20) NOT NULL,
+	[parent_codes] varchar(1000) NOT NULL,
+	[tree_sort] decimal(10) NOT NULL,
+	[tree_sorts] varchar(1000) NOT NULL,
+	[tree_leaf] char(1) NOT NULL,
+	[tree_level] decimal(4) NOT NULL,
+	[tree_names] varchar(1000) NOT NULL,
+	PRIMARY KEY ([module_code])
 );
 
 

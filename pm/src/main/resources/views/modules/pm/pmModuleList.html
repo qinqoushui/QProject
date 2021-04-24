@@ -7,6 +7,9 @@
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<a href="#" class="btn btn-default" id="btnRefreshTree" title="${text('刷新')}"><i class="fa fa-refresh"></i> ${text('刷新')}</a>
+				<a href="#" class="btn btn-default" id="btnExpandTreeNode" title="${text('展开一级')}"><i class="fa fa-angle-double-down"></i> ${text('展开')}</a>
+				<a href="#" class="btn btn-default" id="btnCollapseTreeNode" title="${text('折叠全部')}"><i class="fa fa-angle-double-up"></i> ${text('折叠')}</a>
 				<% if(hasPermi('pm:pmModule:edit')){ %>
 					<a href="${ctx}/pm/pmModule/form" class="btn btn-default btnTool" title="${text('新增功能模块')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
@@ -19,13 +22,6 @@
 		<div class="box-body">
 			<#form:form id="searchForm" model="${pmModule}" action="${ctx}/pm/pmModule/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
-				<div class="form-group">
-					<label class="control-label">${text('父级编号')}：</label>
-					<div class="control-inline width-120">
-						<#form:select path="parentId" dictType="" blankOption="true" class="form-control"
-						items="${parentList}" itemLabel="moduleName" itemValue="id" />
-					</div>
-				</div>
 				<div class="form-group">
 					<label class="control-label">${text('模块名称')}：</label>
 					<div class="control-inline">
@@ -50,7 +46,6 @@
 				</div>
 			</#form:form>
 			<table id="dataGrid"></table>
-			<div id="dataGridPage"></div>
 		</div>
 	</div>
 </div>
@@ -60,24 +55,26 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("编号")}', name:'id', index:'id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/pm/pmModule/form?id='+row.id+'" class="btnList" data-title="${text("编辑功能模块")}">'+(val||row.id)+'</a>';
+		{header:'${text("模块名称")}', name:'moduleName', index:'a.module_name', width:250, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '( '+row.moduleCode+' ) '+'<a href="${ctx}/pm/pmModule/form?moduleCode='+row.moduleCode+'" class="btnList" data-title="${text("编辑功能模块")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("父级模块")}', name:'parentModule.moduleName', index:'a.parent_id', width:150, align:"left", frozen:true},
-
 		{header:'${text("模块名称")}', name:'moduleName', index:'a.module_name', width:150, align:"left"},
 		{header:'${text("模块标签")}', name:'moduleTag', index:'a.module_tag', width:150, align:"left"},
 		{header:'${text("模块地址")}', name:'moduleUrl', index:'a.module_url', width:150, align:"left"},
+		{header:'${text("本级排序号")}', name:'treeSort', index:'a.tree_sort', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('pm:pmModule:edit')){ %>
-				actions.push('<a href="${ctx}/pm/pmModule/form?id='+row.id+'" class="btnList" title="${text("编辑功能模块")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/pm/pmModule/delete?id='+row.id+'" class="btnList" title="${text("删除功能模块")}" data-confirm="${text("确认要删除该功能模块吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/pm/pmModule/form?moduleCode='+row.moduleCode+'" class="btnList" title="${text("编辑功能模块")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/pm/pmModule/delete?moduleCode='+row.moduleCode+'" class="btnList" title="${text("删除功能模块")}" data-confirm="${text("确认要删除该功能模块及所有子功能模块吗？")}" data-deltreenode="'+row.id+'"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/pm/pmModule/form?parentCode='+row.id+'" class="btnList" title="${text("新增下级功能模块")}"><i class="fa fa-plus-square"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}
 	],
-			showCheckbox: true,
+	treeGrid: true,			// 启用树结构表格
+	defaultExpandLevel: 0,	// 默认展开的层次
+	expandNodeClearPostData: 'moduleName,moduleTag,moduleUrl,', // 展开节点清理请求参数数据（一般设置查询条件的字段属性，否则在查询后，不能展开子节点数据）
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){
 		

@@ -7,10 +7,16 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 CREATE TABLE pm_module
 (
     id varchar(20) NOT NULL COMMENT '编号',
-    parent_id varchar(20) COMMENT '父级编号',
     module_name varchar(200) COMMENT '模块名称',
     module_tag varchar(50) COMMENT '模块标签',
     module_url varchar(500) COMMENT '模块地址',
+    parent_id varchar(20) NOT NULL COMMENT '父级编号',
+    parent_codes varchar(1000) NOT NULL COMMENT '所有父级编号',
+    tree_sort decimal(10) NOT NULL COMMENT '本级排序号（升序）',
+    tree_sorts varchar(1000) NOT NULL COMMENT '所有级别排序号',
+    tree_leaf char(1) NOT NULL COMMENT '是否最末级',
+    tree_level decimal(4) NOT NULL COMMENT '层次级别',
+    tree_names varchar(1000) NOT NULL COMMENT '全节点名',
     PRIMARY KEY (id),
     UNIQUE (module_tag)
 ) COMMENT = '功能模块';
