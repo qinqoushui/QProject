@@ -34,7 +34,15 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="operator_count", attrName="operatorCount", label="操作员数量"),
 		@Column(name="user_count", attrName="userCount", label="用户数量"),
 		@Column(includeEntity=DataEntity.class),
-	}, orderBy="a.update_date DESC"
+	}, joinTable = {
+		@JoinTable(type = JoinTable.Type.JOIN, entity = PmProjBase.class, alias = "p",
+				on = "p.id = a.proj_id", attrName = "project",
+				columns = {
+						@Column(includeEntity = PmProjBase.class),
+						@Column(name="id", attrName="id", label="编号", isPK=true),
+						@Column(name="project_name", attrName="projectName", label="项目名称", queryType=QueryType.LIKE),
+				}),
+},  orderBy="a.update_date DESC"
 )
 public class PmProjLic extends DataEntity<PmProjLic> {
 	
@@ -48,7 +56,8 @@ public class PmProjLic extends DataEntity<PmProjLic> {
 	private Long operatorCount;		// 操作员数量
 	private Long userCount;		// 用户数量
 	private List<PmProjLicModule> pmProjLicModuleList = ListUtils.newArrayList();		// 子表列表
-	
+	private PmProjBase project; //项目信息
+
 	public PmProjLic() {
 		this(null);
 	}
@@ -140,5 +149,12 @@ public class PmProjLic extends DataEntity<PmProjLic> {
 	public void setPmProjLicModuleList(List<PmProjLicModule> pmProjLicModuleList) {
 		this.pmProjLicModuleList = pmProjLicModuleList;
 	}
-	
+
+	public PmProjBase getProject() {
+		return project;
+	}
+
+	public void setProject(PmProjBase project) {
+		this.project = project;
+	}
 }

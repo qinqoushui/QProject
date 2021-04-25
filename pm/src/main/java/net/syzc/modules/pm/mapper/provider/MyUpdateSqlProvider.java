@@ -8,7 +8,7 @@ public class MyUpdateSqlProvider   extends UpdateSqlProvider {
 
     public String deleteAll(BaseEntity<?> entity) {
 
-        return "delete from " + MapperHelper.getTableName(MapperHelper.getTable(entity), entity) +" where 1=1";
+        return "delete from " + MapperHelper.getTableName(MapperHelper.getTable(entity), entity)  ;
     }
 
 }

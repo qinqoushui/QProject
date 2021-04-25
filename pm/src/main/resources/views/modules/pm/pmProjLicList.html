@@ -17,15 +17,10 @@
 			<#form:form id="searchForm" model="${pmProjLic}" action="${ctx}/pm/pmProjLic/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('授权标识')}：</label>
-					<div class="control-inline">
-						<#form:input path="sn" maxlength="32" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('项目编号')}：</label>
 					<div class="control-inline">
-						<#form:input path="projId" maxlength="20" class="form-control width-120"/>
+						<#form:select path="projId" maxlength="20" class="form-control width-120"
+						items="${projectList}" itemLabel="projectName" itemValue="id" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -34,12 +29,7 @@
 						<#form:input path="companyName" maxlength="300" class="form-control width-120"/>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label">${text('company_shortname')}：</label>
-					<div class="control-inline">
-						<#form:input path="companyShortname" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
+
 				<div class="form-group">
 					<label class="control-label">${text('生效日期')}：</label>
 					<div class="control-inline">
@@ -54,18 +44,7 @@
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label">${text('操作员数量')}：</label>
-					<div class="control-inline">
-						<#form:input path="operatorCount" maxlength="11" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户数量')}：</label>
-					<div class="control-inline">
-						<#form:input path="userCount" maxlength="11" class="form-control width-120"/>
-					</div>
-				</div>
+
 				<div class="form-group">
 					<label class="control-label">${text('状态')}：</label>
 					<div class="control-inline width-120">
@@ -97,9 +76,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("授权标识")}', name:'sn', index:'a.sn', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/pm/pmProjLic/form?id='+row.id+'" class="btnList" data-title="${text("编辑项目授权信息")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("项目编号")}', name:'projId', index:'a.proj_id', width:150, align:"left"},
+		{header:'${text("项目编号")}', name:'project.projectName', index:'a.proj_id', width:150, align:"left", frozen:true},
 		{header:'${text("单位名称")}', name:'companyName', index:'a.company_name', width:150, align:"left"},
-		{header:'${text("company_shortname")}', name:'companyShortname', index:'a.company_shortname', width:150, align:"left"},
+		{header:'${text("单位简称")}', name:'companyShortname', index:'a.company_shortname', width:150, align:"left"},
 		{header:'${text("生效日期")}', name:'startDate', index:'a.start_date', width:150, align:"center"},
 		{header:'${text("截止日期")}', name:'endTime', index:'a.end_time', width:150, align:"center"},
 		{header:'${text("操作员数量")}', name:'operatorCount', index:'a.operator_count', width:150, align:"center"},
