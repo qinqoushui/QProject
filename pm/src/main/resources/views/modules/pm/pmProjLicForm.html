@@ -1,4 +1,5 @@
-<% layout('/layouts/default.html', {title: '项目授权信息管理', libs: ['validate','dataGrid']}){ %>
+<link rel="stylesheet" href="/static/jquery-ztree/3.5/css/awesome/zTreeStyle.css?V4.2-04251551">
+<% layout('/layouts/default.html', {title: '项目授权信息管理', libs: ['validate','dataGrid','select2','zTree']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
@@ -57,7 +58,7 @@
 								<span class="required ">*</span> ${text('生效日期')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="startDate" readonly="true" maxlength="20" class="form-control laydate required"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd"/>
+									dataFormat="date" data-type="date" data-format="yyyy-MM-dd"/>
 							</div>
 						</div>
 					</div>
@@ -67,7 +68,7 @@
 								<span class="required ">*</span> ${text('截止日期')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="endTime" readonly="true" maxlength="20" class="form-control laydate required"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd"/>
+									dataFormat="date" data-type="date" data-format="yyyy-MM-dd"/>
 							</div>
 						</div>
 					</div>
@@ -103,10 +104,28 @@
 				</div>
 				<h4 class="form-unit">${text('项目授权模块信息')}</h4>
 				<div class="ml10 mr10">
-					<table id="pmProjLicModuleDataGrid"></table>
-					<% if (hasPermi('pm:pmProjLic:edit')){ %>
-						<a href="#" id="pmProjLicModuleDataGridAddRowBtn" class="btn btn-primary btn-sm mt10 mb10"><i class="fa fa-plus"></i> ${text('增行')}</a>
-					<% } %>
+					<div id="menuTrees"></div>
+					<script id="menuTpl" type="text/template">
+						<div class="pull-left" style="padding:0 15px;min-width:300px;">
+							<div class="box box-solid" style="background:#FAFAFA">
+								<div class="box-header">
+									<div class="box-title icheck">
+										<label><input type="checkbox" id="checkall_{{d.key}}"
+													  class="checkall"/> {{d.label}}</label>
+									</div>
+									<div class="box-tools pull-right" style="top:8px;">
+										<a class="btn btn-box-tool" id="expand_{{d.key}}"
+										   value="menuTree_{{d.key}}" >展开</a>/<a
+											class="btn btn-box-tool" id="collapse_{{d.key}}"
+											value="menuTree_{{d.key}}" >折叠</a>
+									</div>
+								</div>
+								<div class="box-body">
+									<div id="menuTree_{{d.key}}" class="ztree"></div>
+								</div>
+							</div>
+						</div>
+					</script>
 				</div>
 			</div>
 			<div class="box-footer">
@@ -119,57 +138,32 @@
 					</div>
 				</div>
 			</div>
+		<input type="hidden" id="pmProjLicModuleIdList" name="pmProjLicModuleIdList" value=""/>
 		</#form:form>
 	</div>
 </div>
 <% } %>
-<script>
-//初始化项目授权模块信息DataGrid对象
-$("#pmProjLicModuleDataGrid").dataGrid({
-
-	data: ${toJson(pmProjLic.pmProjLicModuleList)},
-	datatype: "local", // 设置本地数据
-	autoGridHeight: function(){return 'auto'}, // 设置自动高度
-	
-	// 设置数据表格列
-	columnModel: [
-		{header:'状态', name:'status', editable:true, hidden:true},
-		{header:'主键', name:'id', editable:true, hidden:true},
-		{header:'${text("项目授权编号")}', name:'licId.id', editable:true, hidden:true},
-		{header:'${text("模块名称")}', name:'moduleName', width:150, editable:true, edittype:'text', editoptions:{'maxlength':'200', 'class':'form-control required'}},
-		{header:'${text("模块标签")}', name:'moduleTag', width:150, editable:true, edittype:'text', editoptions:{'maxlength':'50', 'class':'form-control required'}},
-		{header:'${text("模块规模限制")}', name:'moduleLimit', width:150, editable:true, edittype:'text', editoptions:{'maxlength':'11', 'class':'form-control digits'}},
-		{header:'${text("模块地址")}', name:'moduleUrl', width:150, editable:true, edittype:'text', editoptions:{'maxlength':'500', 'class':'form-control'}},
-		{header:'${text("操作")}', name:'actions', width:80, sortable:false, fixed:true, formatter: function(val, obj, row, act){
-			var actions = [];
-			if (val == 'new'){
-				actions.push('<a href="#" onclick="js.confirm(\'${text("你确认要删除这条数据吗？")}\', function(){$(\'#pmProjLicModuleDataGrid\').dataGrid(\'delRowData\',\''+obj.rowId+'\')});return false;"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			}else{
-				actions.push('<a href="#" onclick="js.confirm(\'${text("你确认要删除这条数据吗？")}\', function(){$(\'#pmProjLicModuleDataGrid\').dataGrid(\'setRowData\',\''+obj.rowId+'\',null,{display:\'none\'});$(\'#'+obj.rowId+'_status\').val(\''+Global.STATUS_DELETE+'\');});return false;"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			}
-			return actions.join('');
-		}, editoptions: {defaultValue: 'new'}}
-	],
-	
-	// 编辑表格参数
-	editGrid: true,				// 是否是编辑表格
-	editGridInitRowNum: 1,		// 编辑表格的初始化新增行数
-	editGridAddRowBtn: $('#pmProjLicModuleDataGridAddRowBtn'),	// 子表增行按钮
-	editGridAddRowInitData: {id: '', status: Global.STATUS_NORMAL},	// 新增行的时候初始化的数据
-	
-	// 编辑表格的提交数据参数
-	editGridInputFormListName: 'pmProjLicModuleList', // 提交的数据列表名
-	editGridInputFormListAttrs: 'status,id,licId.id,moduleName,moduleTag,moduleLimit,moduleUrl,', // 提交数据列表的属性字段
-	
-	// 加载成功后执行事件
-	ajaxSuccess: function(data){
-		
-	}
-});
-</script>
+<!--<script src="/static/jquery/jquery-3.5.0.min.js"></script>-->
+<!--<script src="/static/jquery/jquery-migrate-3.2.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/select2/4.0/select2.js?${_version}"></script>
+<script src="/static/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js?${_version}"></script>
+<script src="/static/jquery-validation/1.16/jquery.validate.js?${_version}"></script>
+<link rel="stylesheet" href="/static/icheck/1.0/minimal/grey.css?${_version}">
+-->
 <script>
 $("#inputForm").validate({
 	submitHandler: function(form){
+		// 获取数据权限数据
+		var menuData = [];
+		$.each(menuTrees, function(key, menuTree){
+			var treeNodes = menuTree.getCheckedNodes(true);
+			for(var i=0; i<treeNodes.length; i++) {
+				menuData.push({id: treeNodes[i].id,module_limit:0x7fffffff});
+			}
+		});
+		$("#pmProjLicModuleIdList").val(JSON.stringify(menuData));
+		// 提交表单数据
 		js.ajaxSubmitForm($(form), function(data){
 			js.showMessage(data.message);
 			if(data.result == Global.TRUE){
@@ -178,6 +172,84 @@ $("#inputForm").validate({
 				});
 			}
 		}, "json");
-    }
+	}
 });
+//加载数据权限树结构
+var setting = {
+			check:{enable:true,nocheckInherit:true,chkboxType:{"Y":"ps","N":"ps"}},
+			view:{selectedMulti:false,nameIsHTML: true},
+			data:{simpleData:{enable:true},key:{title:"title"}},
+			callback:{
+				beforeClick: function (treeId, treeNode, clickFlag) {
+					var tree = $.fn.zTree.getZTreeObj(treeId);
+					tree.checkNode(treeNode, !treeNode.checked, true, true);
+					return false;
+				},
+				onCheck: function (event, treeId, treeNode){ }
+			}
+		},
+		sysCodeDict = [{"cssClass":"","cssStyle":"","dictValue":"default","dictLabel":"主导航菜单"}],
+		menuTrees = {}; // 用sysCode分类存储所有菜单树
+$.ajax({
+	type: 'POST',
+	url: "${ctx}/pm/pmProjLic/moduleTreeData?___t=" + new Date().getTime(),
+	data: JSON.stringify({id: '${pmProjLic.id}'}),
+	dataType: 'json',
+	contentType: "application/json",
+	async: false,
+	error: function(data){
+		js.showErrorMessage(data.responseText);
+	},
+	success: function(data, status, xhr){
+		for (var sysCode in data.menuMap){
+			var menuMap = data.menuMap[sysCode];
+			$('#menuTrees').append(js.template('menuTpl', {key: sysCode,
+				label: '功能模块清单'}));
+			// 初始化树结构
+			var tree = $.fn.zTree.init($("#menuTree_"+sysCode), setting, menuMap);
+			// 展开第一级节点
+			var nodes = tree.getNodesByParam("level", 0);
+			for(var i=0; i<nodes.length; i++) {
+				tree.expandNode(nodes[i], true, false, false);
+			}
+			// 展开第二级节点
+			nodes = tree.getNodesByParam("level", 1);
+			for(var i=0; i<nodes.length; i++) {
+				tree.expandNode(nodes[i], true, false, false);
+			}
+			// 默认展开全部节点
+			//tree.expandAll(true);
+			// 树结构：全选、取消全选
+			$('#checkall_'+sysCode).iCheck({
+				checkboxClass:'icheckbox_minimal-grey'
+			}).on('ifChecked ifUnchecked', function(){
+				var sysCode = $(this).attr('sysCode');
+				if(this.checked){
+					menuTrees[sysCode].checkAllNodes(true);
+				}else{
+					menuTrees[sysCode].checkAllNodes(false);
+				}
+			}).attr("sysCode", sysCode);
+			// 展开和折叠按钮绑定
+			$('#expand_'+sysCode).click(function(){
+				var sysCode = $(this).attr('sysCode');
+				menuTrees[sysCode].expandAll(true);
+			}).attr("sysCode", sysCode);
+			$('#collapse_'+sysCode).click(function(){
+				var sysCode = $(this).attr('sysCode');
+				menuTrees[sysCode].expandAll(false);
+			}).attr("sysCode", sysCode);
+			// 将树对象存储到全局数组里
+			menuTrees[sysCode] = tree;
+		}
+		debugger;
+		// 默认选择节点
+		for (var idx in data.roleMenuList){
+			var roleMenu = data.roleMenuList[idx];
+			var node = menuTrees[sysCode].getNodeByParam("id",roleMenu.id);
+			try{menuTrees[sysCode].checkNode(node, true, false);}catch(e){}
+		}
+	}
+});
+
 </script>

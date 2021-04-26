@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.syzc.modules.pm.dao.PmProjLicModuleDao">
-	
-	<!-- 查询数据
-	<select id="findList" resultType="PmProjLicModule">
-		SELECT ${sqlMap.column.toSql()}
-		FROM ${sqlMap.table.toSql()}
-		<where>
-			${sqlMap.where.toSql()}
-		</where>
-		ORDER BY ${sqlMap.order.toSql()}
-	</select> -->
-	
+
+
+    <select id="findListByLic"  parameterType="PmProjLicModule" resultType="PmProjLicModule">
+        SELECT *
+        FROM ${sqlMap.table.toSql()}
+        <where>
+            ${sqlMap.where.toSql()}   and length(#{licId.id})>0
+        </where>
+        ORDER BY ${sqlMap.order.toSql()}
+    </select>
+
+    <select id="findListByLic"  parameterType="PmProjLicModule" resultType="PmProjLicModule" databaseId="sqlserver">
+        SELECT *
+        FROM ${sqlMap.table.toSql()}
+        <where>
+            ${sqlMap.where.toSql()}   and len(#{licId.id})>0
+        </where>
+        ORDER BY ${sqlMap.order.toSql()}
+    </select>
+
+    <insert id="insertBatch">
+    		INSERT INTO `pm_proj_lic_module` (
+                 id,lic_id,module_name,module_tag,module_url,module_limit
+    		) VALUES
+    		<foreach item="item" index="index" collection="param1" separator=",">
+    			(
+                #{item.id},
+                #{item.licId.id},
+    			#{item.moduleName},
+    			#{item.moduleTag},
+    			#{item.moduleUrl},
+                #{item.moduleLimit}
+    			)
+    		</foreach>
+    	</insert>
+    <delete id="deleteByParent" parameterType="PmProjLicModule">
+        delete
+        from `pm_proj_lic_module`
+        where lic_id = #{licId.id}
+
+    </delete>
+
+
 </mapper>

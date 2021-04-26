@@ -58,7 +58,6 @@ $('#dataGrid').dataGrid({
 		{header:'${text("模块名称")}', name:'moduleName', index:'a.module_name', width:250, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '( '+row.moduleCode+' ) '+'<a href="${ctx}/pm/pmModule/form?moduleCode='+row.moduleCode+'" class="btnList" data-title="${text("编辑功能模块")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("模块名称")}', name:'moduleName', index:'a.module_name', width:150, align:"left"},
 		{header:'${text("模块标签")}', name:'moduleTag', index:'a.module_tag', width:150, align:"left"},
 		{header:'${text("模块地址")}', name:'moduleUrl', index:'a.module_url', width:150, align:"left"},
 		{header:'${text("本级排序号")}', name:'treeSort', index:'a.tree_sort', width:150, align:"center"},
